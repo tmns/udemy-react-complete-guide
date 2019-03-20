@@ -1,0 +1,19 @@
+/* remember all values here are GLOBAL */
+.Person {
+    width: 60%;
+    margin: 16px auto;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    padding: 16px;
+    text-align: center;
+}
+
+/* This is perfectly valid for styling media queries,
+    However, you can also do this with Radium, if you want
+    to scope it to a component or change it dynamically.
+    See Person.js for the Radium implementation. */
+/* @media (min-width: 500px) {
+    .Person {
+        width: 450px;
+    }
+} */
