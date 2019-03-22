@@ -10,7 +10,6 @@ const burger = (props) => {
             });
         })
         .reduce((arr, el) => {
-            console.log(arr.concat(el));
             return arr.concat(el);
         }, []);
 
