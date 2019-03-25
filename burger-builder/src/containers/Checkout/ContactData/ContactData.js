@@ -8,6 +8,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
+import { updateObject, checkValidity } from '../../../shared/utility';
 
 class ContactData extends Component {
     state = {
@@ -103,7 +104,7 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault(); // prevents the default action of sending a req & reloading the page
-       // this.setState({ loading: true })
+        // this.setState({ loading: true })
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
@@ -137,21 +138,21 @@ class ContactData extends Component {
     }
 
     inputChangeHandler = (event, inputIdentifier) => {
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        };
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        };
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
-        updatedFormElement.touched = true;
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            value: event.target.value,
+            touched: true,
+        }) 
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        })
+
         let formIsValid = true;
         for (let inputIdentifer in updatedOrderForm) {
-            formIsValid = updatedOrderForm[inputIdentifer].valid && formIsValid; 
+            formIsValid = updatedOrderForm[inputIdentifer].valid && formIsValid;
         }
-        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid})
+        this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
     }
 
     render() {
@@ -165,7 +166,7 @@ class ContactData extends Component {
         let form = (
             <form onSubmit={this.orderHandler}>
                 {formElementsArray.map(formElement => (
-                    <Input 
+                    <Input
                         key={formElement.id}
                         valueType={formElement.config.valueType}
                         elementType={formElement.config.elementType}
