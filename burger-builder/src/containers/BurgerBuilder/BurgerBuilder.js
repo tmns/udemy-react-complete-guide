@@ -10,7 +10,8 @@ import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+// export used here in order for testing (to remove it from the redux context)
+export class BurgerBuilder extends Component {
     // constructor(props) {
     //     super(props);
     //     this.state = {...}
