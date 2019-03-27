@@ -29,6 +29,8 @@ export const fetchIngredientsFailed = () => {
 }
 
 export const initIngredients = () => {
+    
+
     return dispatch => {
         axios.get('https://udemy-burger-builder-b62b2.firebaseio.com/ingredients.json')
         .then(response => {
@@ -38,4 +40,8 @@ export const initIngredients = () => {
             dispatch(fetchIngredientsFailed());
         });
     }
+
+    // return {
+    //     type: actionTypes.INIT_INGREDIENTS
+    // }
 }

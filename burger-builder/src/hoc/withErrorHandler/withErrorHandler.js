@@ -1,44 +1,59 @@
-import React, { Component } from 'react';
+// import React, { useState, useEffect } from 'react';
+import React from 'react'
+
 import Modal from '../../components/UI/Modal/Modal';
+import useHttpErrorHandler from '../../hooks/http-error-handler';
 
 const withErrorHandler = (WrappedComponent, axios) => {
-    return class extends Component {
-        state = {
-            error: null
-        }
+    return props => {
 
-        componenWillMount () {
-            this.reqInterceptor = axios.interceptors.request.use(req => {
-                this.setState({error: null});
-                return req;
-            });
-            this.resInterceptor = axios.interceptors.response.use(res => res, error => {
-                this.setState({error: error});
-            });
-        }
+        // now uses custom hook '../../hooks/http-error-handler
 
-        // make sure we remove our interceptors to prevent memory leaks
-        componentWillUnmount () {
-          //  console.log('Will unmount', this.reqInterceptor, this.resInterceptor);  
-            axios.interceptors.request.eject(this.reqInterceptor);
-            axios.interceptors.response.eject(this.resInterceptor);
-        }
+        // const [error, setError] = useState(null);
 
-        errorConfirmedHandler = () => {
-            this.setState({error: null});
-        }
+        // //componenWillMount () {
+        //     const reqInterceptor = axios.interceptors.request.use(req => {
+        //         //this.setState({error: null});
+        //         setError(null);
+        //         return req;
+        //     });
+        //     const resInterceptor = axios.interceptors.response.use(res => res, err => {
+        //         // this.setState({error: err});
+        //         setError(err);
+        //     });
+        // //}
 
-        render () {
-            return (
-                <React.Fragment>
-                    <Modal 
-                        show={this.state.error}
-                        modalClosed={this.errorConfirmedHandler}
-                    >{this.state.error ? this.state.error.message : null}</Modal>
-                    <WrappedComponent {...this.props} />
-                </React.Fragment>
-            );
-        };
+        // useEffect(() => {
+        //     return () => {
+        //         axios.interceptors.request.eject(reqInterceptor);
+        //         axios.interceptors.response.eject(resInterceptor);
+        //     }
+        // }, [reqInterceptor, resInterceptor])
+
+        // // make sure we remove our interceptors to prevent memory leaks
+        // // componentWillUnmount () {
+        // //   //  console.log('Will unmount', this.reqInterceptor, this.resInterceptor);  
+        // //     axios.interceptors.request.eject(this.reqInterceptor);
+        // //     axios.interceptors.response.eject(this.resInterceptor);
+        // // }
+
+        // const errorConfirmedHandler = () => {
+        //     //this.setState({error: null});
+        //     setError(null)
+        // }
+
+        const [error, clearError] = useHttpErrorHandler(axios);
+
+        return (
+            <React.Fragment>
+                <Modal 
+                    show={error}
+                    // modalClosed={errorConfirmedHandler}
+                    modalClosed={clearError}
+                >{error ? error.message : null}</Modal>
+                <WrappedComponent {...props} />
+            </React.Fragment>
+        );
     };
 };
 
