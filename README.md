@@ -22,3 +22,9 @@
 ...and much more!
 
 #### It's a great course and I highly recommend it!
+
+### Below is a screenshot of the main course project you get to build in the course. 
+
+#### Burger Builder (along with Redux dev tools open for a glimpse at the state)
+
+![](./screens/burger-builder-main-authnd.png)
